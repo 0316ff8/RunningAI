@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import pandas as pd
+
 # 使用chrome driver
 driver = webdriver.Chrome('E:\\Drive\\DB103\\ETL\\ch1\\chromedriver.exe')
 # 定義登入帳號密碼
@@ -32,7 +33,6 @@ df = pd.DataFrame(columns=['id', "路線名稱", "距離", "時間", "上坡高�
 
 # 通知下方程式要使用瀏覽器的cookie
 with requests.Session() as s:
-
     # 取出儲存的cookie資料
     for i, cookie in enumerate(cookie_list):
         s.cookies.set(cookie['name'], cookie['value'])
@@ -44,7 +44,7 @@ with requests.Session() as s:
         html = BeautifulSoup(response.text)
         rs = html.find_all("li", class_="pic-item")
         # print(rs)
-        if rs != []:
+        if rs not in []:
             n = 0
             for r in rs:
                 # 抓取每一個
@@ -59,21 +59,22 @@ with requests.Session() as s:
                 # print(html2)
                 detail = html2.find('div', class_='details-table')
                 detail_dict = {}
-                if detail != None:
+                if detail not in None:
                     # print(detail.text)
                     detail2 = detail.find_all('div', class_='flex-none')
                     detail3 = detail.find_all('div', class_='flex-1')
                     list_len = len(detail2)
                     # print(list_len)
 
-
                     for i in range(list_len):
                         title = detail2[i].text
                         content = detail3[i].text
                         # print(repr(content)[1:3])
                         title = title.replace('\n', '')
-                        if repr(content)[1:3] == '\\n':
+                        if repr(content)[1:3] == '\\n' or repr(content)[-3:-1] == '\\n':
                             content = content[1:-1]
+                            content = content.replace(' ', '_')
+                            content = content.replace('\r', '')
                             content = content.replace('\n', '&')
                         content = content.replace('\n', '&')
                         detail_dict[title] = content
@@ -142,7 +143,7 @@ with requests.Session() as s:
             print('\n完成第{}頁，共{}個檔案'.format(p, count))
             p += 1
         else:
-            print("\n\n完成，共爬了{}頁，{}個GPX檔案已儲存".format(p-1, count))
+            print("\n\n完成，共爬了{}頁，{}個GPX檔案已儲存".format(p - 1, count))
             # Step4. 儲存檔案
             # index=False, 不要儲存0,1,2....
             # df.to_csv("hiking/gpx.csv",
