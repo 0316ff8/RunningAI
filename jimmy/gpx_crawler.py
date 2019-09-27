@@ -7,8 +7,8 @@ import pandas as pd
 # 使用chrome driver
 driver = webdriver.Chrome('E:\\Drive\\DB103\\ETL\\ch1\\chromedriver.exe')
 # 定義登入帳號密碼
-username = 'jimmy29304825@yahoo.com.tw'
-password = 'Jimmy8193026'
+username = 'XXXXXXXXX'
+password = 'XXXX'
 # 進入連結
 url_login = 'https://hiking.biji.co/index.php?q=trail&act=gpx_list'
 driver.get(url_login)
