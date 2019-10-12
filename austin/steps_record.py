@@ -141,7 +141,7 @@ if __name__ == '__main__':
                   ## get time data
                   t = datetime.datetime.now()
                   fd = str(t).split(' ')[0].replace("-", "_")
-                  data3 = {"Y":SS, "SPM":SPM, "DateTime":t, "ID":id}
+                  data3 = {"Z":SS, "SPM":SPM, "DateTime":t, "ID":id}
                   df = df.append(data3, ignore_index = True)
                   
                   if s == 1:
