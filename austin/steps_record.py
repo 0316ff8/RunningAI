@@ -44,10 +44,10 @@ address = 0x68       # via i2cdetect
 # Aktivieren, um das Modul ansprechen zu koennen
 bus.write_byte_data(address, power_mgmt_1, 0)
 
-df = pd.DataFrame(columns=["Y","SPM","DateTime","ID",])
+df = pd.DataFrame(columns=["Z","SPM","DateTime","ID",])
 id="ausitn"
 s = 1
-count = 1
+# count = 1
 
 if __name__ == '__main__':
 
@@ -146,12 +146,12 @@ if __name__ == '__main__':
                   
                   if s == 1:
                       print 'first'
-                      df.to_csv(fd + '_SMP_' + id + '_' + str(count) + '.csv', encoding="utf-8", mode='a', index=False)
+                      df.to_csv(fd + '_SMP_' + id + '.csv', encoding="utf-8", mode='a', index=False)
                       df.drop(df.index, inplace=True)
                       s += 1
                   elif s % 10 == 0:
                       print 'loop'
-                      df.to_csv(fd + '_SMP_' + id + '_' + str(count) + '.csv', encoding="utf-8", mode='a', index=False, header=False)
+                      df.to_csv(fd + '_SMP_' + id + '.csv', encoding="utf-8", mode='a', index=False, header=False)
                       df.drop(df.index, inplace=True)
                       s += 1
                   else:
@@ -185,5 +185,5 @@ if __name__ == '__main__':
               # encoding="utf-8", mode='a', index=False)
     # print count, 'saved'
     
-    count += 1
+    # count += 1
     s = 1
