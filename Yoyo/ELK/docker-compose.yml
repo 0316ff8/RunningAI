@@ -1,0 +1,57 @@
+version: '2'
+services:
+
+  jupyter:
+    build:
+      context: ./dockerfile
+      dockerfile: dockerfile-jupyter
+    container_name: jupyter
+    hostname: jupyter
+    networks:
+      - elk
+    ports:
+      - "8889:8888"
+    command: start-notebook.sh --NotebookApp.token=''
+    volumes:
+      - ./jupyter:/home/jovyan/work
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+    hostname: elasticsearch
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    environment:
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+    networks:
+      - elk
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:6.2.4
+    hostname: logstash
+    container_name: logstash
+    ports:
+      - "5000:5000"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.2.4
+    hostname: kibana
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    networks:  
+      - elk
+    depends_on:
+      - elasticsearch
+ 
+networks:
+  elk:
+    driver: bridge
